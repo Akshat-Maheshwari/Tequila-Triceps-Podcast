@@ -46,6 +46,18 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(`${__dirname}/public`));
 
+app.get('/podcast',async (req,res)=>{
+  try{
+    const podcasts= await PodcastSchema.find();
+    return res.status(200).json(podcasts);
+    console.log(podcasts);
+  }
+  catch(e){
+    console.log(e)
+  }
+
+
+})
 
 app.post("/api/uploadFile", upload.single("file"), (req, res) => {
   // console.log(req.body);

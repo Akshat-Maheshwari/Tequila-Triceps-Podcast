@@ -9,10 +9,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import {useAuth} from "../contexts/AuthContext";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddFile() {
 
     const {baseURL}=useAuth();
+    const navigate= useNavigate();
 
     const podcastName=useRef();
     const podcastDes=useRef();
@@ -39,7 +41,6 @@ export default function AddFile() {
         // for (const [key, value] of formData.entries()) {
         //     console.log(`${key}: ${value}`);
         // }
-
           await axios.post(baseURL+"/api/uploadFile", formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -53,6 +54,7 @@ export default function AddFile() {
               //handle error
               console.log(response);
             });
+            navigate('/')
     }
 
   return (
