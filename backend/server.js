@@ -23,7 +23,7 @@ mongoose
 
 
 
-const port = 3000;
+const port = 3001;
 const server = app.listen(port, () => {
   console.log("Server is up listening on port:" + port);
 });

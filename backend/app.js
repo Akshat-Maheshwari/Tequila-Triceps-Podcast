@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-const File = require("./model/fileSchema");
+const PodcastSchema = require("./model/podcastSchema");
 const multer = require("multer");
+const cors= require('cors')
 
 const app = express();
 const multerStorage = multer.diskStorage({
@@ -33,6 +34,13 @@ app.use(
     extended: true,
   })
 );
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.header('Access-Control-Allow-Credentials', true)
+  return next()
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -40,8 +48,17 @@ app.use(express.static(`${__dirname}/public`));
 
 
 app.post("/api/uploadFile", upload.single("file"), (req, res) => {
-  
-  console.log(req.file);
+  // console.log(req.body);
+  const podcastSchema= new PodcastSchema(
+    {...req.body,
+    count:0,
+  fileURL:req.file.filename}
+  )
+  podcastSchema.save()
+  .then(
+      ()=> console.log("Podcast Added"),
+  )
+  .catch((err)=>console.log(err))
 });
 
 //Express server
@@ -142,14 +159,14 @@ module.exports = app;
 // // })
 
 
-// // const firstadmin= new Admins({
-// //     id:"3SYgc7h4f6crwj9NyLHYt7WXwXq1"
-// // })
-// // firstadmin.save()
-// // .then(
-// //     ()=> console.log("admin added"),
-// // )
-// // .catch((err)=>console.log(err))
+// const firstadmin= new Admins({
+//     id:"3SYgc7h4f6crwj9NyLHYt7WXwXq1"
+// })
+// firstadmin.save()
+// .then(
+//     ()=> console.log("admin added"),
+// )
+// .catch((err)=>console.log(err))
         
 
 

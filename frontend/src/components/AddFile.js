@@ -7,27 +7,52 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
+import {useAuth} from "../contexts/AuthContext";
+import axios from 'axios';
 
 export default function AddFile() {
+
+    const {baseURL}=useAuth();
 
     const podcastName=useRef();
     const podcastDes=useRef();
     const speakerName=useRef();
+    const category=useRef();
 
     const [podName,setPodName]=useState('');
     const [podDes,setPodDes]=useState('');
     const [speaker,setSpeaker]=useState('');
     const [type,setType]=useState('');
     const [file,setFile]=useState('');
+    const [cat,setCategory]=useState('');
 
-    const handleSubmit=()=>{
+    const handleSubmit=async (e)=>{
+        e.preventDefault();
         const formData = new FormData();
         formData.append('podcastName',podName);
         formData.append('podcastDes',podDes);
         formData.append('speakerName',speaker);
+        formData.append('category',cat);
         formData.append('type',type);
         formData.append('file',file);
-        console.log(formData);
+        // console.log(formData);
+        // for (const [key, value] of formData.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
+
+          await axios.post(baseURL+"/api/uploadFile", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+            .then(function (response) {
+              //handle success
+              console.log(response);
+            })
+            .catch(function (response) {
+              //handle error
+              console.log(response);
+            });
     }
 
   return (
@@ -48,6 +73,7 @@ export default function AddFile() {
                             <TextField ref={podcastName} onChange={e => {setPodName(e.target.value)}} required id="standard-basic" label="Podcast Name" variant="outlined" />
                             <TextField ref={podcastDes} onChange={e => {setPodDes(e.target.value)}} required id="standard-basic" label="Podcast Description" variant="outlined" />
                             <TextField ref={speakerName} onChange={e => {setSpeaker(e.target.value)}} required id="standard-basic" label="Speaker Name" variant="outlined" />
+                            <TextField ref={category} onChange={e => {setCategory(e.target.value)}} required id="standard-basic" label="Category" variant="outlined" />
                             <RadioGroup
                                 aria-labelledby="radio-buttons-group-label"
                                 name="Type of the podcast"
@@ -61,9 +87,10 @@ export default function AddFile() {
                             id="raised-button-file"
                             hidden
                             type="file"
+                            name='file'
                             onChange={e => {setFile(e.target.files[0])}}
                             />
-                            <Button variant="contained" onClick={()=>{handleSubmit()}}>Submit</Button>
+                            <Button variant="contained" onClick={(e)=>{handleSubmit(e)}}>Submit</Button>
                         </div>
                         </FormControl>
                         
