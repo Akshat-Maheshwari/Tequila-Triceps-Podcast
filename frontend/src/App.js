@@ -18,7 +18,9 @@ function App() {
           </PrivateRoute>} />
           <Route path='/signup' element={<Signup/>} />
           <Route path='/login' element={<Login/>} />
-          <Route path='/addfile' element={<AddFile/>} />
+          <Route path='/addfile' element={<PrivateRoute>
+            <AddFile />
+          </PrivateRoute>} />
         </Routes>
       </AuthProvider>
     </Router>      
