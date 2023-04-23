@@ -26,7 +26,7 @@ export default function Dashboard() {
             setLoading(false)
           })
       }
-    }, [])
+    })
 
 
     return (
