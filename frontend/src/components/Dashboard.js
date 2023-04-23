@@ -90,6 +90,7 @@ export default function Dashboard() {
                       description={item.podcastDes}
                       type={item.type}
                       fileURL={item.fileURL}
+                      thumbnailURL={item.thumbnailURL}
                       baseURL={baseURL}
                       />
                     </div>;

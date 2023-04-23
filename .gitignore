@@ -93,3 +93,6 @@ Thumbs.db
 
 # Storybook static build
 storybook-static
+
+#service acc key
+serviceAccountKey.json
