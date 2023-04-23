@@ -67,6 +67,7 @@ export default function PodcastContainer(props) {
                       type={item.type}
                       fileURL={item.fileURL}
                       baseURL={baseURL}
+                      thumbnailURL={item.thumbnailURL}
                       />
                     </div>;
                 })}

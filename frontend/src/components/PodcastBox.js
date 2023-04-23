@@ -23,7 +23,6 @@ export const PodcastBox = function MusicCard(props) {
       <CardMedia
         component="img"
         sx={{ objectFit:"cover", borderRadius:5, height: 250, width: 300, padding:1 }}
-        image="https://images.complex.com/complex/images/c_fill,dpr_auto,f_auto,q_auto,w_1400/fl_lossy,pg_1/travis-scott-album-cover-2016_omwibv/travis-scott-album-cover-2016?fimg-ssr-default"
         alt="thumbnail"
         image={props.thumbnailURL}
       />
