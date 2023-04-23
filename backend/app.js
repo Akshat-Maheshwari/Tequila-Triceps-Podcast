@@ -15,7 +15,26 @@ admin.initializeApp({
   storageBucket: process.env.BUCKET_URL
 });
 app.locals.bucket = admin.storage().bucket()
-const multerStorage = multer.memoryStorage();
+const multerStorage = multer.memoryStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'public'))
+},
+filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split("/")[1])
+}
+});
+/////////////////////////////////////////////////////////////////////////////////
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//       cb(null, path.join(__dirname, 'public'))
+//   },
+//   filename: function (req, file, cb) {
+//           cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split("/")[1])
+//   }
+// });
+
+////////////////////////////////////////////////////////////////////////////////
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
 //     cb(null, "public");
@@ -27,7 +46,7 @@ const multerStorage = multer.memoryStorage();
 // });
 
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.split("/")[0] === "audio" || file.mimetype.split("/")[0] === "video") {
+  if (file.mimetype.split("/")[0] === "audio" || file.mimetype.split("/")[0] === "video" || file.mimetype.split("/")[0] === "image") {
     cb(null, true);
   } else {
     cb(new Error("Not a audio or video File!!"), false);
@@ -38,6 +57,9 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
+
+
+
 // Configurations for "body-parser"
 app.use(
   bodyParser.urlencoded({
@@ -96,6 +118,54 @@ app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
   )
   .catch((err)=>console.log(err))
 });
+
+////////////////////////////////////////////////////////////////////
+app.post("/api/uploadMultiple", upload.fields(
+  [
+      {
+          name:'file', maxCount:1
+      },
+      {
+          name: 'thumbnail', maxCount:1
+      }
+  ]
+), async(req, res) => {
+  const options = {
+		version: 'v2',
+		action: 'read',
+		expires: '01-01-4000'
+	};
+  // console.log(req.files.file);
+  const podFile = req.files.file[0];
+  const thumbnailFile = req.files.thumbnail[0];
+  // const fileName = req.body.title;
+  // console.log(podFile.mimetype);
+  // console.log(thumbnailFile.mimetype);
+  const ext1 = podFile.mimetype.split("/")[1];
+  const podFileName =`${podFile.fieldname}-${Date.now()}.${ext1}`
+  const ext2 = thumbnailFile.mimetype.split("/")[1];
+  const thumbnailFileName =`${thumbnailFile.fieldname}-${Date.now()}.${ext2}`
+  // console.log(thumbnailFileName);
+  await app.locals.bucket.file(thumbnailFileName).createWriteStream().end(req.files.thumbnail[0].buffer)
+  await app.locals.bucket.file(podFileName).createWriteStream().end(req.files.file[0].buffer)
+  res.send('done');
+  const [url] = await app.locals.bucket.file(podFileName).getSignedUrl(options);
+  const [thumbnailURL] = await app.locals.bucket.file(thumbnailFileName).getSignedUrl(options);
+  const podcastSchema= new PodcastSchema(
+    {...req.body,
+    count:0,
+    fileURL:url,
+    thumbnailURL:thumbnailURL}
+  )
+  podcastSchema.save()
+  .then(
+      ()=> console.log("Podcast Added"),
+  )
+  .catch((err)=>console.log(err))
+  
+})
+
+
 
 //Express server
 module.exports = app;

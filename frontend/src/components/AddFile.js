@@ -26,7 +26,7 @@ export default function AddFile() {
     const [speaker,setSpeaker]=useState('');
     const [type,setType]=useState('');
     const [file,setFile]=useState('');
-    // const [thumbnail,setThumbnail]=useState('');
+    const [thumbnail,setThumbnail]=useState('');
     const [cat,setCategory]=useState('');
 
     const handleSubmit=async (e)=>{
@@ -38,25 +38,25 @@ export default function AddFile() {
         formData.append('category',cat);
         formData.append('type',type);
         formData.append('file',file);
-        // formData.append('thumbnail',thumbnail);
+        formData.append('thumbnail',thumbnail);
         // console.log(formData);
-        for (const [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-          await axios.post(baseURL+"/api/uploadFile", formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+        // for (const [key, value] of formData.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
+        await axios.post(baseURL+"/api/uploadMultiple", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(function (response) {
+            //handle success
+            console.log(response);
           })
-            .then(function (response) {
-              //handle success
-              console.log(response);
-            })
-            .catch(function (response) {
-              //handle error
-              console.log(response);
-            });
-            // navigate('/')
+          .catch(function (response) {
+            //handle error
+            console.log(response);
+          });
+          // navigate('/')
     }
 
   return (
@@ -96,7 +96,7 @@ export default function AddFile() {
                             name='file'
                             onChange={e => {setFile(e.target.files[0])}}
                             />
-                            {/* <div className="text-lg">Add Thumbnail</div>
+                            <div className="text-lg">Add Thumbnail</div>
                             <Input
                             accept="*"
                             id="raised-button-file"
@@ -105,7 +105,7 @@ export default function AddFile() {
                             type="file"
                             name='thumbnail'
                             onChange={e => {setThumbnail(e.target.files[0])}}
-                            /> */}
+                            />
                             <Button variant="contained" onClick={(e)=>{handleSubmit(e)}}>Submit</Button>
                         </div>
                         </FormControl>

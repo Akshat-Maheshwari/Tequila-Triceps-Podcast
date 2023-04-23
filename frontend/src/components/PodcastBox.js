@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -10,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Stack from '@mui/material/Stack';
+import PodcastModal from './PodcastModal';
 
 function limitText(text, maxLength) {
   if (text.length <= maxLength) return text;
@@ -17,7 +16,6 @@ function limitText(text, maxLength) {
   var lastSpace = text.lastIndexOf(' ');
   return text.substr(0, lastSpace) + '...';
 }
-
 export const PodcastBox = function MusicCard(props) {
   return (
     <>
@@ -27,6 +25,7 @@ export const PodcastBox = function MusicCard(props) {
         sx={{ objectFit:"cover", borderRadius:5, height: 250, width: 300, padding:1 }}
         image="https://images.complex.com/complex/images/c_fill,dpr_auto,f_auto,q_auto,w_1400/fl_lossy,pg_1/travis-scott-album-cover-2016_omwibv/travis-scott-album-cover-2016?fimg-ssr-default"
         alt="thumbnail"
+        image={props.thumbnailURL}
       />
       <CardContent sx={{padding:1}}>
         <Stack direction="row" sx={{textAlign:"left", justifyContent:"space-between"}}>
