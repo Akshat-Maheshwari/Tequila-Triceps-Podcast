@@ -47,11 +47,11 @@ export const PodcastBox = function MusicCard(props) {
         <Box sx={style}>
           {props.type==="audio"?(
           <audio controls>
-              <source src={props.baseURL+"/"+props.fileURL} type="audio/mpeg" />
+              <source src={props.fileURL} type="audio/mpeg" />
               Your browser does not support the audio tag.
           </audio>):(
               <video controls>
-                  <source src={props.baseURL+"/"+props.fileURL} type="video/mp4" />
+                  <source src={props.fileURL} type="video/mp4" />
                   Your browser does not support the video tag.
               </video>
           )}

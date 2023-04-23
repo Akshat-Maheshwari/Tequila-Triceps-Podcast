@@ -4,17 +4,27 @@ const path = require("path");
 const PodcastSchema = require("./model/podcastSchema");
 const multer = require("multer");
 const cors= require('cors')
+var admin = require("firebase-admin");
+require('dotenv').config()
 
 const app = express();
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public");
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split("/")[1];
-    cb(null, `files/admin-${file.fieldname}-${Date.now()}.${ext}`);
-  },
+const serviceAccount = require("./serviceAccountKey.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://podcast-52283-default-rtdb.firebaseio.com",
+  storageBucket: process.env.BUCKET_URL
 });
+app.locals.bucket = admin.storage().bucket()
+const multerStorage = multer.memoryStorage();
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "public");
+//   },
+//   filename: (req, file, cb) => {
+//     const ext = file.mimetype.split("/")[1];
+//     cb(null, `files/admin-${file.fieldname}-${Date.now()}.${ext}`);
+//   },
+// });
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.split("/")[0] === "audio" || file.mimetype.split("/")[0] === "video") {
@@ -46,6 +56,9 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(`${__dirname}/public`));
 
+app.get('/',async (req,res)=>{
+  res.send("working")
+})
 app.get('/podcast',async (req,res)=>{
   try{
     const podcasts= await PodcastSchema.find();
@@ -59,12 +72,22 @@ app.get('/podcast',async (req,res)=>{
 
 })
 
-app.post("/api/uploadFile", upload.single("file"), (req, res) => {
-  // console.log(req.body);
+app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
+  const options = {
+		version: 'v2',
+		action: 'read',
+		expires: '01-01-4000'
+	};
+  const ext = req.file.mimetype.split("/")[1];
+  const fileName =`${Date.now()}.${ext}`
+  await app.locals.bucket.file(fileName).createWriteStream().end(req.file.buffer)
+  res.send('done');
+  const [url] = await app.locals.bucket.file(fileName).getSignedUrl(options);
+	// console.log(url);
   const podcastSchema= new PodcastSchema(
     {...req.body,
     count:0,
-  fileURL:req.file.filename}
+  fileURL:url}
   )
   podcastSchema.save()
   .then(
