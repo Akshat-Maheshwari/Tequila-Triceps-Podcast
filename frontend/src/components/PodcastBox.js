@@ -10,27 +10,27 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Stack from '@mui/material/Stack';
 import PodcastModal from './PodcastModal';
 
+function limitText(text, maxLength) {
+  if (text.length <= maxLength) return text;
+  text = text.substr(0, maxLength);
+  var lastSpace = text.lastIndexOf(' ');
+  return text.substr(0, lastSpace) + '...';
+}
 export const PodcastBox = function MusicCard(props) {
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
-    <Card sx={{ width: 245 }}>
-      <Button onClick={handleOpen} sx={{padding: 0}}>
+    <>
+    <Card sx={{boxShadow:"rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",padding:1,borderRadius:3,width: 300,  minHeight:400, margin:2}}>
       <CardMedia
         component="img"
-        sx={{ height: 250, width: 250 }}
-        image={props.thumbnailURL}
+        sx={{ objectFit:"cover", borderRadius:5, height: 250, width: 300, padding:1 }}
+        image="https://images.complex.com/complex/images/c_fill,dpr_auto,f_auto,q_auto,w_1400/fl_lossy,pg_1/travis-scott-album-cover-2016_omwibv/travis-scott-album-cover-2016?fimg-ssr-default"
         alt="thumbnail"
+        image={props.thumbnailURL}
       />
-      </Button>
-      <PodcastModal open={open} handleClose={handleClose} fileURL={props.fileURL} type={props.type} name={props.podcastName} speaker={props.speakerName} thumbnailURL={props.thumbnailURL}/>
-      <CardContent>
-        <Stack direction="row" sx={{justifyContent:"space-between"}}>
+      <CardContent sx={{padding:1}}>
+        <Stack direction="row" sx={{textAlign:"left", justifyContent:"space-between"}}>
           <Stack>
-          <Typography gutterBottom variant="h5" component="div" sx={{marginBottom:0}}>
+          <Typography gutterBottom variant="h6" component="div" sx={{marginBottom:0, textAlign:'center'}}>
             {props.podcastName}
           </Typography>
           <Typography gutterBottom variant="h8" component="div">
@@ -43,12 +43,12 @@ export const PodcastBox = function MusicCard(props) {
             </IconButton>
           </CardActions>
         </Stack>
-        <Typography sx={{height:30}} variant="body2" color="text.secondary">
-          {props.description}
+        <Typography sx={{height:30, textAlign:"justify"}} variant="body2" color="text.secondary">
+          {limitText(props.description,110)}
         </Typography>
       </CardContent>
     </Card>
-    
+    </>
   );
 };
 export default PodcastBox;
