@@ -26,6 +26,7 @@ export default function AddFile() {
     const [speaker,setSpeaker]=useState('');
     const [type,setType]=useState('');
     const [file,setFile]=useState('');
+    // const [thumbnail,setThumbnail]=useState('');
     const [cat,setCategory]=useState('');
 
     const handleSubmit=async (e)=>{
@@ -37,10 +38,11 @@ export default function AddFile() {
         formData.append('category',cat);
         formData.append('type',type);
         formData.append('file',file);
+        // formData.append('thumbnail',thumbnail);
         // console.log(formData);
-        // for (const [key, value] of formData.entries()) {
-        //     console.log(`${key}: ${value}`);
-        // }
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
           await axios.post(baseURL+"/api/uploadFile", formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -54,7 +56,7 @@ export default function AddFile() {
               //handle error
               console.log(response);
             });
-            navigate('/')
+            // navigate('/')
     }
 
   return (
@@ -73,9 +75,9 @@ export default function AddFile() {
                         <div className='flex flex-col gap-5'>
                             <div className="text-lg font-bold text-center">Add Podcast</div>
                             <TextField ref={podcastName} onChange={e => {setPodName(e.target.value)}} required id="standard-basic" label="Podcast Name" variant="outlined" />
-                            <TextField ref={podcastDes} onChange={e => {setPodDes(e.target.value)}} required id="standard-basic" label="Podcast Description" variant="outlined" />
+                            <TextField ref={podcastDes} onChange={e => {setPodDes(e.target.value)}} id="standard-basic" label="Podcast Description" variant="outlined" />
                             <TextField ref={speakerName} onChange={e => {setSpeaker(e.target.value)}} required id="standard-basic" label="Speaker Name" variant="outlined" />
-                            <TextField ref={category} onChange={e => {setCategory(e.target.value)}} required id="standard-basic" label="Category" variant="outlined" />
+                            <TextField ref={category} onChange={e => {setCategory(e.target.value)}} id="standard-basic" label="Category" variant="outlined" />
                             <RadioGroup
                                 aria-labelledby="radio-buttons-group-label"
                                 name="Type of the podcast"
@@ -84,14 +86,26 @@ export default function AddFile() {
                                 <FormControlLabel value="audio" control={<Radio />} label="Audio" />
                                 <FormControlLabel value="video" control={<Radio />} label="Video" />
                             </RadioGroup>
+                            <div className="text-lg">Add Audio/Video</div>
                             <Input
                             accept="*"
                             id="raised-button-file"
                             hidden
+                            required
                             type="file"
                             name='file'
                             onChange={e => {setFile(e.target.files[0])}}
                             />
+                            {/* <div className="text-lg">Add Thumbnail</div>
+                            <Input
+                            accept="*"
+                            id="raised-button-file"
+                            hidden
+                            required
+                            type="file"
+                            name='thumbnail'
+                            onChange={e => {setThumbnail(e.target.files[0])}}
+                            /> */}
                             <Button variant="contained" onClick={(e)=>{handleSubmit(e)}}>Submit</Button>
                         </div>
                         </FormControl>
