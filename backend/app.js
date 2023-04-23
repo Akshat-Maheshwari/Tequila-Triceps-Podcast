@@ -73,6 +73,7 @@ app.get('/podcast',async (req,res)=>{
 })
 
 app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
+  console.log(req.file)
   const options = {
 		version: 'v2',
 		action: 'read',
