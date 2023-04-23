@@ -1,36 +1,36 @@
 import React from 'react';
-import cx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import TextInfoContent from '@mui-treasury/components/content/textInfo';
-import { useFourThreeCardMediaStyles } from '@mui-treasury/styles/cardMedia/fourThree';
-import { useN04TextInfoContentStyles } from '@mui-treasury/styles/textInfoContent/n04';
-import { useOverShadowStyles } from '@mui-treasury/styles/shadow/over';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export const PodcastBox = function MusicCard() {
-  const mediaStyles = useFourThreeCardMediaStyles();
-  const textCardContentStyles = useN04TextInfoContentStyles();
-  const shadowStyles = useOverShadowStyles({ inactive: true });
+
   return (
-    <Card className="max-w-xs mx-auto rounded-lg p-4 shadow-md">
+    <Card sx={{ maxWidth: 345 }}>
       <CardMedia
-        className={cx('rounded-md', mediaStyles.root)}
-        image={
-          'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80'
-        }
+        component="img"
+        sx={{ height: 350, width: 350 }}
+        image="https://images.complex.com/complex/images/c_fill,dpr_auto,f_auto,q_auto,w_1400/fl_lossy,pg_1/travis-scott-album-cover-2016_omwibv/travis-scott-album-cover-2016?fimg-ssr-default"
+        alt="Paella dish"
       />
       <CardContent>
-        <TextInfoContent
-          classes={textCardContentStyles}
-          overline={'Kesha'}
-          heading={'Inner Varnika'}
-          body={
-            'That year, collection of songs, review melodies, memories full, this is a long and warm journey'
-          }
-        />
+        <Typography variant="body2" color="text.secondary">
+          This impressive paella is a perfect party dish and a fun meal to cook
+          together with your guests. Add 1 cup of frozen peas along with the mussels,
+          if you like.
+        </Typography>
       </CardContent>
+      <CardActions >
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+      </CardActions>
     </Card>
+    
   );
 };
 export default PodcastBox;
