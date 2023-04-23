@@ -1,28 +1,39 @@
-import React,{useState, useEffect} from "react"
+import React,{useState, useEffect, useRef} from "react"
 import Sidebar from "./Sidebar"
 import Navbar from "./Navbar"
 import axios from 'axios';
 import { useAuth } from "../contexts/AuthContext";
-import ReactPlayer from 'react-player'
+import PodcastBox from "./PodcastBox";
 
 
 export default function Dashboard() {
-
     const {baseURL}=useAuth();
     const [allPodcast, setAllPodcast]=useState([]);
+    const [loading, setLoading]=useState(true)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
       return () => {
         axios.get(baseURL+'/podcast')
-          .then(function (response) {
+          .then(function(response) {
             setAllPodcast(response.data);
+            setError(null);
+          })
+          .catch((err)=>{
+            setError(err.message)
+            setAllPodcast(null)
+          }).finally(()=>{
+            setLoading(false)
           })
       }
     }, [])
-    
+
 
     return (
         <>
+            {loading && <div>Loading...</div>}
+            {error && <div>{error}</div>}
+            {!loading && allPodcast && (<>
             <div>
                 {allPodcast.map((item)=>{
                     return <div key={item._id}>{item.podcastName}
@@ -39,9 +50,12 @@ export default function Dashboard() {
                     </div>;
                 })}
             </div>
+            <PodcastBox />
             <Navbar />
             <div className=""></div>
             <Sidebar />
+            </>)}
+            
         </>
     )
 }
