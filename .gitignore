@@ -2,6 +2,7 @@
 /dist
 /tmp
 /out-tsc
+serviceAccountKey.json
 
 # Runtime data
 pids
