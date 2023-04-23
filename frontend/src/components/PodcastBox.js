@@ -26,7 +26,7 @@ export const PodcastBox = function MusicCard(props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  console.log(props.fileURL)
   return (
     <Card sx={{ width: 245 }}>
       <Button onClick={handleOpen} sx={{padding: 0}}>

@@ -55,7 +55,7 @@ export default function Dashboard() {
             setLoading(false)
           })
       }
-    })
+    }, [baseURL])
 
 
     return (
@@ -89,7 +89,7 @@ export default function Dashboard() {
                       speakerName={item.speakerName}
                       description={item.podcastDes}
                       type={item.type}
-                      findURL={item.fileURL}
+                      fileURL={item.fileURL}
                       baseURL={baseURL}
                       />
                     </div>;
