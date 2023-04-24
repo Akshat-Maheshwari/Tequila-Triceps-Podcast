@@ -26,6 +26,7 @@ export default function Dashboard() {
 
     useEffect(() => {
       return async () => {
+        console.log("inside use effect", baseURL+'/podcast')
         await axios.get(baseURL+'/podcast')
           .then(function(response) {
             console.log("podcast get req");
