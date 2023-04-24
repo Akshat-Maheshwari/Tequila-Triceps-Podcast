@@ -23,11 +23,9 @@ export default function Dashboard() {
       data.sort((a, b) => b.createdAt-a.createdAt);
       setRecent(data);
     }
-    console.log("outside useEffect")
-    useEffect(() => {
-      console.log("inside use effect")
-      return async () => {
-        console.log("inside axios", baseURL+'/podcast')
+    
+    async function getPodcast(){
+      console.log("inside axios", baseURL+'/podcast')
         await axios.get(baseURL+'/podcast')
           .then(function(response) {
             console.log("podcast get req");
@@ -41,23 +39,14 @@ export default function Dashboard() {
             console.log("loading done")
             setLoading(false)
           })
-          axios.get(baseURL+'/favorite', { params: { email: currentUser.email } })
-          .then(response => {
-            setFavorite(response.data)
-          })
-          .catch(error => {
-            console.error(error);
-      });
-      if(allPodcast.length>0){
-        const filteredArray = allPodcast.filter(obj => {
-          const matchingIdObject = favorite.find(idObj => idObj.id === obj._id);
-          return matchingIdObject !== undefined;
-        });
-        setFavoritePod(filteredArray);
-      }
-      }
+    }
+    console.log("outside useEffect")
+    useEffect(() => {
+      console.log("inside use effect")
+       getPodcast();
     }, [])
 
+    
     
 
 
