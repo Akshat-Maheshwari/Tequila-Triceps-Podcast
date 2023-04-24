@@ -67,7 +67,7 @@ export const PodcastBox = function MusicCard(props) {
           </Typography>
           </Stack>
           <CardActions sx={{padding:0, alignItems: "flex-start"}}>
-            <IconButton onClick={(e)=>handleFav(e)} sx={{color:props.fav?"red":"grey"}} aria-label="add to favorites">
+            <IconButton onClick={handleFav} sx={{color:props.fav?"red":"grey"}} aria-label="add to favorites">
               <FavoriteIcon />
             </IconButton>
           </CardActions>

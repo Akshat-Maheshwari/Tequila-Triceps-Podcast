@@ -15,6 +15,7 @@ export default function Dashboard() {
     const [favoritePod, setFavoritePod]=useState([]);
     const [loading, setLoading]=useState(true)
     const [error, setError] = useState(null)
+    const [toggle,setToggle] = useState(false)
     function handleData(data){
       setAllPodcast(data);
       data.sort((a, b) => b.count - a.count);
@@ -25,28 +26,47 @@ export default function Dashboard() {
     }
     
     async function getPodcast(){
-      console.log("inside axios", baseURL+'/podcast')
+      // console.log("inside axios", baseURL+'/podcast')
         await axios.get(baseURL+'/podcast')
           .then(function(response) {
-            console.log("podcast get req");
-            console.log(response.data)
+            // console.log("podcast get req");
+            // console.log(response.data)
             handleData(response.data);
             setError(null);
           })
           .catch((err)=>{
             setError(err.message)
           }).finally(()=>{
-            console.log("loading done")
+            // console.log("loading done")
             setLoading(false)
           })
     }
-    console.log("outside useEffect")
+    // console.log("outside useEffect")
     useEffect(() => {
-      console.log("inside use effect")
+      // console.log("inside use effect")
        getPodcast();
     }, [])
 
-    
+    async function getFav(){
+      await axios.get(baseURL+'/favorite', { params:{email:currentUser.email}})
+      .then(response => {
+        setFavorite(response.data)
+        if(allPodcast.length>0){
+          const filteredArray = allPodcast.filter(obj => {
+            const matchingIdObject = favorite.find(idObj => idObj.id === obj._id);
+            return matchingIdObject !== undefined;
+          });
+          setFavoritePod(filteredArray);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+    useEffect(() => {
+       getFav();
+    }, [])
+
     
 
 

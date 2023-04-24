@@ -98,6 +98,7 @@ app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
 
 app.post("/api/favorite", async(req, res) => {
   try {
+    console.log("api/favorite")
     const user = await FavSchema.findOne({ email: req.body.email });
     
     if (user && user.favorite.some((fav) => fav.id === req.body.id)) {
