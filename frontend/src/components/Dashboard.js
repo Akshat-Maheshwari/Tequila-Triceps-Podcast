@@ -35,12 +35,10 @@ export default function Dashboard() {
           })
           .catch((err)=>{
             setError(err.message)
-            setAllPodcast(null)
           }).finally(()=>{
             console.log("loading done")
             setLoading(false)
           })
-
           axios.get(baseURL+'/favorite', { params: { email: currentUser.email } })
           .then(response => {
             setFavorite(response.data)
@@ -56,14 +54,16 @@ export default function Dashboard() {
         setFavoritePod(filteredArray);
       }
       }
-    }, [baseURL, allPodcast])
+    }, [baseURL])
+
+    
 
 
     return (
         <>
             {loading && <div>Loading...</div>}
             {error && <div>{error}</div>}
-            {!loading && allPodcast && (<>
+            {!loading && allPodcast.length && (<>
             <Navbar />
             <div className="flex flex-col gap-20 mb-28">
             
