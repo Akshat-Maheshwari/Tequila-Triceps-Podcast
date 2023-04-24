@@ -23,10 +23,11 @@ export default function Dashboard() {
       data.sort((a, b) => b.createdAt-a.createdAt);
       setRecent(data);
     }
-
+    console.log("outside useEffect")
     useEffect(() => {
+      console.log("inside use effect")
       return async () => {
-        console.log("inside use effect", baseURL+'/podcast')
+        console.log("inside axios", baseURL+'/podcast')
         await axios.get(baseURL+'/podcast')
           .then(function(response) {
             console.log("podcast get req");
@@ -55,7 +56,7 @@ export default function Dashboard() {
         setFavoritePod(filteredArray);
       }
       }
-    }, [baseURL])
+    }, [])
 
     
 
