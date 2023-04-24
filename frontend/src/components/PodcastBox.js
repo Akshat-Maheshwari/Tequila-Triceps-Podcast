@@ -17,9 +17,15 @@ function limitText(text, maxLength) {
   return text.substr(0, lastSpace) + '...';
 }
 export const PodcastBox = function MusicCard(props) {
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
     <Card sx={{boxShadow:"rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",padding:1,borderRadius:3,width: 300,  minHeight:400, margin:2}}>
+      <Button onClick={handleOpen}>
       <CardMedia
         component="img"
         sx={{ objectFit:"cover", borderRadius:5, height: 250, width: 300, padding:1 }}
@@ -27,6 +33,8 @@ export const PodcastBox = function MusicCard(props) {
         alt="thumbnail"
         image={props.thumbnailURL}
       />
+      </Button>
+      <PodcastModal open={open} handleClose={handleClose} podcastName={props.podcastName} speakerName={props.speakerName} description={props.description} thumbnailURL={props.thumbnailURL} fileURL={props.fileURL} type={props.type}/>
       <CardContent sx={{padding:1}}>
         <Stack direction="row" sx={{textAlign:"left", justifyContent:"space-between"}}>
           <Stack>

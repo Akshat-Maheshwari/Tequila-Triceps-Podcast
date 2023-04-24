@@ -35,10 +35,17 @@ export default function PodcastContainer(props) {
     //   };
 
   return (
-    <div className={`w-11/12 mx-auto p-2 bg-gray-200 rounded-3xl mb-20 mt-1 ${props.right?"rounded-e-none mr-0":"rounded-s-none ml-0"}`}>
-        <div className='pl-4 text-2xl text-gray-600' >
+    <>
+    <div className='flex justify-between'>
+    {props.right && <div className='flex'>
+    <div className='text-center flex align-middle pl-8'>
+      <Typography variant="h4" component="div" gutterBottom  style={{transform: "rotate(180deg)", writingMode: "vertical-rl", whiteSpace: "nowrap"}}>{props.title}</Typography>
+    </div>
+    </div>}
+    <div className={`w-11/12 p-2 bg-gray-200 rounded-3xl mt-1 ${props.right?"rounded-e-none mr-0":"rounded-s-none ml-0"}`}>
+        {/* <div className='pl-4 text-2xl text-gray-600' >
             {props.title}
-        </div>
+        </div> */}
         {/* <div className="flex justify-between scroll-smooth">
             <IconButton
               onClick={() => {
@@ -72,5 +79,12 @@ export default function PodcastContainer(props) {
                 })}
             </div>
     </div>
+    {!props.right && <div className='flex'>
+    <div className='text-center flex align-middle pr-8'>
+      <Typography variant="h4" component="div" gutterBottom  style={{transform: "rotate(360deg)", writingMode: "vertical-rl", whiteSpace: "nowrap"}}>{props.title}</Typography>
+    </div>
+    </div>}
+    </div>
+    </>
   )
 }
