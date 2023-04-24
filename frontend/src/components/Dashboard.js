@@ -37,8 +37,10 @@ export default function Dashboard() {
             {error && <div>{error}</div>}
             {!loading && allPodcast && (<>
             <Navbar />
+            <div className="flex flex-col gap-20 mb-28">
             <PodcastContainer title={"Most Popular and Trending"} array={allPodcast} right={true}/>
             <PodcastContainer title={"Favourite"} array={allPodcast}/>
+            </div>
             {/* <PodcastBox 
                       podcastName={allPodcast[0].podcastName} 
                       speakerName={allPodcast[0].speakerName}

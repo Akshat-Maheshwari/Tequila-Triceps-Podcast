@@ -1,4 +1,5 @@
-import React from 'react'
+import React , { useRef, useEffect }  from "react" ;
+import Cookies from "js-cookie";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -20,6 +21,22 @@ const style = {
 };
 
 export default function PodcastModal(props) {
+  const videoRef=useRef(null);
+  const handleVideoEnd = () => {Cookies.remove(props.fileURL);};
+  const handleVideoPause = () => {Cookies.set(props.fileURL, videoRef.currentTime)};
+
+  useEffect(() => {const playbackTime = Cookies.get(props.fileURL);
+  if(playbackTime) {
+      videoRef.currentTime = playbackTime;
+      console.log(videoRef)
+    }
+    // console.log(playbackTime);
+    // if(playbackTime) {
+    //   console.log("j")
+    //   videoRef.currentTime.play();
+    // }
+  }, [props.fileURL, videoRef]);
+
   return (
     <Modal
     open={props.open}
@@ -37,26 +54,26 @@ export default function PodcastModal(props) {
         }
         <div className='flex justify-center'>
         {props.type==="audio"?(
-        <audio controls>
-            <source src={props.fileURL} type="audio/mpeg" />
-            Your browser does not support the audio tag.
-        </audio>):(
-            <div style={{width:"45vw"}}>
-            <video width="100%" controls>
-                <source src={props.fileURL} type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
-            </div>
+          <audio width="100%" controls autoPlay>
+              <source src={props.fileURL} type="audio/mpeg" />
+              Your browser does not support the audio tag.
+          </audio>):(
+          <div style={{width:"45vw"}}>
+          <video autoPlay ref={videoRef} onEnded={handleVideoEnd} onPause={handleVideoPause} width="100%" controls>
+              <source src={props.fileURL} type="video/mp4" />
+              Your browser does not support the video tag.
+          </video>
+          </div>
         )}
         </div>
         <div className='flex flex-col p-8'>
           <div className='flex justify-between'>
           <div className='flex flex-col'>
           <Typography gutterBottom variant="h5" component="div">
-              {props.name}
+              {props.podcastName}
           </Typography>
           <Typography gutterBottom variant="h8" component="div">
-              {props.speaker}
+              {props.speakerName}
           </Typography>
           </div>
           <IconButton aria-label="add to favorites">
@@ -69,3 +86,30 @@ export default function PodcastModal(props) {
     </Modal>
   )
 }
+
+
+// import React , { useRef, useEffect }  from "react" ;
+// import  Cookies from "js-cookie";
+
+// function VideoPlayer({ src }) {
+  
+// const videoRef =useRef( null);
+
+  
+// useEffect(() => {const playbackTime = Cookies.get("videoPlaybackTime");
+    
+// if(playbackTime) {
+//   videoRef.current.currentTime = playbackTime;
+//   }
+//   videoRef.current.play();
+//   }, []);
+
+// const handleVideoEnd = () => {Cookies.remove("videoPlaybackTime");};
+
+// const handleVideoPause = () => {Cookies.set("videoPlaybackTime", videoRef.current.currentTime)};
+
+
+// return (    
+// <video src={src} ref={videoRef} onEnded={handleVideoEnd} onPause={handleVideoPause}/>
+//   );
+// }
