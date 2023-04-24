@@ -66,7 +66,8 @@ export default function PodcastContainer(props) {
             </div> */}
             <div ref={elementRef} className="flex overflow-x-auto gap-4 scrollbar-hide">
                 {props.array.map((item)=>{
-                    return <div key={item._id}>
+                 return props.fav.some(obj => obj._id === item._id)?(
+                    <div key={item._id}>
                       <PodcastBox 
                       podcastName={item.podcastName} 
                       speakerName={item.speakerName}
@@ -75,8 +76,24 @@ export default function PodcastContainer(props) {
                       fileURL={item.fileURL}
                       baseURL={baseURL}
                       thumbnailURL={item.thumbnailURL}
+                      id={item._id}
+                      fav={true}
                       />
-                    </div>;
+                    </div>
+                  ):(<div key={item._id}>
+                      <PodcastBox 
+                      podcastName={item.podcastName} 
+                      speakerName={item.speakerName}
+                      description={item.podcastDes}
+                      type={item.type}
+                      fileURL={item.fileURL}
+                      baseURL={baseURL}
+                      thumbnailURL={item.thumbnailURL}
+                      id={item._id}
+                      fav={false}
+                      />
+                    </div>)
+                   
                 })}
             </div>
     </div>

@@ -28,7 +28,6 @@ export default function PodcastModal(props) {
   useEffect(() => {const playbackTime = Cookies.get(props.fileURL);
   if(playbackTime) {
       videoRef.currentTime = playbackTime;
-      console.log(videoRef)
     }
     // console.log(playbackTime);
     // if(playbackTime) {

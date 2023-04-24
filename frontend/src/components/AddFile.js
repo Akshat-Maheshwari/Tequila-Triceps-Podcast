@@ -56,7 +56,7 @@ export default function AddFile() {
             //handle error
             console.log(response);
           });
-          // navigate('/')
+          navigate('/')
     }
 
   return (

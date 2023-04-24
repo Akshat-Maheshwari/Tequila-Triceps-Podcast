@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Stack from '@mui/material/Stack';
 import PodcastModal from './PodcastModal';
+import { useAuth } from "../contexts/AuthContext";
+import axios from 'axios';
 
 function limitText(text, maxLength) {
   if (text.length <= maxLength) return text;
@@ -18,9 +20,29 @@ function limitText(text, maxLength) {
 }
 export const PodcastBox = function MusicCard(props) {
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [favorite, setFavorite]=useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const {baseURL, currentUser}=useAuth();
+
+ async function handleFav(e){
+  console.log(currentUser.email, props.id)
+  await axios.post(baseURL+"/api/favorite", {
+    email: currentUser.email,
+    id: props.id
+  }, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+      .then(function (response) {
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+      setFavorite(!favorite);
+  }
 
   return (
     <>
@@ -33,7 +55,7 @@ export const PodcastBox = function MusicCard(props) {
         image={props.thumbnailURL}
       />
       </Button>
-      <PodcastModal open={open} handleClose={handleClose} podcastName={props.podcastName} speakerName={props.speakerName} description={props.description} thumbnailURL={props.thumbnailURL} fileURL={props.fileURL} type={props.type}/>
+      <PodcastModal open={open} handleClose={handleClose} id={props.id} podcastName={props.podcastName} speakerName={props.speakerName} description={props.description} thumbnailURL={props.thumbnailURL} fileURL={props.fileURL} type={props.type}/>
       <CardContent sx={{padding:1}}>
         <Stack direction="row" sx={{textAlign:"left", justifyContent:"space-between"}}>
           <Stack>
@@ -45,7 +67,7 @@ export const PodcastBox = function MusicCard(props) {
           </Typography>
           </Stack>
           <CardActions sx={{padding:0, alignItems: "flex-start"}}>
-            <IconButton aria-label="add to favorites">
+            <IconButton onClick={(e)=>handleFav(e)} sx={{color:props.fav?"red":"grey"}} aria-label="add to favorites">
               <FavoriteIcon />
             </IconButton>
           </CardActions>

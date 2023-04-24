@@ -12,6 +12,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const Search = styled('div')(({ theme }) => ({
   
@@ -59,7 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Navbar() {
   const {currentUser, logout}=useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const navigate= useNavigate();
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -67,6 +69,9 @@ export default function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleAdminPanel=()=>{
+    navigate('/addfile')
+  }
   return (
     <Box sx={{ flexGrow: 1, "margin-bottom":"50px"}}>
       <AppBar position="static" sx={{boxShadow:'none',"background":"white" }}>
@@ -117,7 +122,7 @@ export default function Navbar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Admin Panel</MenuItem>
+                <MenuItem onClick={handleAdminPanel}>Admin Panel</MenuItem>
                 <MenuItem onClick={logout}>Log Out</MenuItem>
               </Menu>
             </div>

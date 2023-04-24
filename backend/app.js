@@ -2,12 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const PodcastSchema = require("./model/podcastSchema");
+const FavSchema = require("./model/favSchema")
 const multer = require("multer");
 const cors= require('cors')
 var admin = require("firebase-admin");
 require('dotenv').config()
 
 const app = express();
+
 const serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -23,28 +25,6 @@ filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split("/")[1])
 }
 });
-/////////////////////////////////////////////////////////////////////////////////
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//       cb(null, path.join(__dirname, 'public'))
-//   },
-//   filename: function (req, file, cb) {
-//           cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split("/")[1])
-//   }
-// });
-
-////////////////////////////////////////////////////////////////////////////////
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "public");
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.mimetype.split("/")[1];
-//     cb(null, `files/admin-${file.fieldname}-${Date.now()}.${ext}`);
-//   },
-// });
-
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.split("/")[0] === "audio" || file.mimetype.split("/")[0] === "video" || file.mimetype.split("/")[0] === "image") {
     cb(null, true);
@@ -59,13 +39,12 @@ const upload = multer({
 });
 
 
-
-// Configurations for "body-parser"
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
+app.use(bodyParser.json());
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET, OPTIONS')
@@ -90,8 +69,6 @@ app.get('/podcast',async (req,res)=>{
   catch(e){
     console.log(e)
   }
-
-
 })
 
 app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
@@ -118,6 +95,56 @@ app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
   )
   .catch((err)=>console.log(err))
 });
+
+app.post("/api/favorite", async(req, res) => {
+  try {
+    const user = await FavSchema.findOne({ email: req.body.email });
+    
+    if (user && user.favorite.some((fav) => fav.id === req.body.id)) {
+      // The favorite already exists, so remove it
+      await FavSchema.findOneAndUpdate(
+        { email: req.body.email },
+        { $pull: { favorite: { id: req.body.id } } },
+        { new: true }
+      );
+    } else {
+      // The favorite doesn't exist, so add it
+      await FavSchema.findOneAndUpdate(
+        { email: req.body.email },
+        { $addToSet: { favorite: { id: req.body.id } } },
+        { upsert: true, new: true }
+      );
+    }
+
+    console.log('favorite toggles');
+    res.send(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.get('/favorite', async(req, res) => {
+  const userEmail = req.query.email;
+  if (!userEmail) {
+    // The email parameter is missing
+    return res.status(400).send('Missing email parameter');
+  }
+  try {
+    const user = await FavSchema.findOne({ email: userEmail });
+    if (!user) {
+      // The user doesn't exist
+      return res.status(404).send('User not found');
+    }
+    const favorites = user.favorite;
+    res.send(favorites);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+
 
 ////////////////////////////////////////////////////////////////////
 app.post("/api/uploadMultiple", upload.fields(
