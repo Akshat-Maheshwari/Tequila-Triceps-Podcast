@@ -10,7 +10,7 @@ export function useAuth(){
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser]= useState();
     const [loading, setLoading] = useState(true);
-    const baseURL="http://localhost:3001";
+    const baseURL="https://backend-jxv0.onrender.com/";
 
     const value={
         currentUser,
