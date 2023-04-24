@@ -28,6 +28,8 @@ export default function Dashboard() {
       return async () => {
         await axios.get(baseURL+'/podcast')
           .then(function(response) {
+            console.log("podcast get req");
+            console.log(response.data)
             handleData(response.data);
             setError(null);
           })
@@ -35,6 +37,7 @@ export default function Dashboard() {
             setError(err.message)
             setAllPodcast(null)
           }).finally(()=>{
+            console.log("loading done")
             setLoading(false)
           })
 
@@ -54,7 +57,6 @@ export default function Dashboard() {
       }
       }
     }, [baseURL, allPodcast])
-
 
 
     return (

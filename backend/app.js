@@ -63,8 +63,8 @@ app.get('/',async (req,res)=>{
 app.get('/podcast',async (req,res)=>{
   try{
     const podcasts= await PodcastSchema.find();
+    console.log("get request from podcast");
     return res.status(200).json(podcasts);
-    console.log(podcasts);
   }
   catch(e){
     console.log(e)
