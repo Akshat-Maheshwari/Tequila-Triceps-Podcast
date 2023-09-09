@@ -1,4 +1,4 @@
-"# Tequila-Triceps-Podcast" 
+# Tequila-Triceps-Podcast
 # For running locally
 # After pulling,
 # Inside frontend go to src/contexts/AuthContext.js and change baseURL to "http://localhost:3001" and save it.
