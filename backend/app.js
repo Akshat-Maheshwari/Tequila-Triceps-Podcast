@@ -9,6 +9,7 @@ var admin = require("firebase-admin");
 require('dotenv').config()
 
 const app = express();
+// app.use(cors())
 
 const serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
@@ -70,7 +71,18 @@ app.get('/podcast',async (req,res)=>{
     console.log(e)
   }
 })
-
+app.post('/search',async(req,res)=>{
+  try{
+    const podcasts= await PodcastSchema.find();
+    console.log("get request from podcast for search");
+    const query=req.body.query;
+    const results = podcasts.filter(item => item.podcastName.toLowerCase().includes(query.toLowerCase()) || item.podcastDes.toLowerCase().includes(query.toLowerCase()) || item.speakerName.toLowerCase().includes(query.toLowerCase()));
+    return res.status(200).json(results);
+  }
+  catch(e){
+    console.log(e)
+  }
+})
 app.post("/api/uploadFile", upload.single("file"), async(req, res) => {
   console.log(req.file)
   const options = {

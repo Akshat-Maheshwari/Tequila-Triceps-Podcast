@@ -3,9 +3,7 @@ import Cookies from "js-cookie";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import FavButton from './FavButton';
 
 const style = {
   position: 'absolute',
@@ -20,46 +18,37 @@ const style = {
   boxShadow: 24,
 };
 
-export default function PodcastModal(props) {
-  const videoRef=useRef(null);
-  const handleVideoEnd = () => {Cookies.remove(props.fileURL);};
-  const handleVideoPause = () => {Cookies.set(props.fileURL, videoRef.currentTime)};
+export default function PodcastModal({fav,open,handleClose,item}) {
 
-  useEffect(() => {const playbackTime = Cookies.get(props.fileURL);
-  if(playbackTime) {
-      videoRef.currentTime = playbackTime;
+  const videoRef=useRef(null);
+  const handleVideoEnd = () => {Cookies.remove(item.fileURL);};
+  const handleVideoPause = () => {console.log(videoRef);Cookies.set(item.fileURL, videoRef.currentTime)};
+
+  useEffect(() => {
+    const playbackTime = Cookies.get(item.fileURL);
+    if(playbackTime) {
+        videoRef.currentTime = playbackTime;
     }
-    // console.log(playbackTime);
-    // if(playbackTime) {
-    //   console.log("j")
-    //   videoRef.currentTime.play();
-    // }
-  }, [props.fileURL, videoRef]);
+  }, [item.fileURL, videoRef]);
 
   return (
-    <Modal
-    open={props.open}
-    onClose={props.handleClose}
-    aria-labelledby="modal-modal-title"
-    aria-describedby="modal-modal-description"
-    >
+    <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box sx={style}>
-        {props.type==="audio" && 
+        {
+        item.type==="audio" && 
         <div className='flex justify-center'>
-        <img src={props.thumbnailURL}
-        alt="thumbnail" style={{height:"40vh", borderRadius: '10px', padding:"20px"}}
-        />
+          <img src={item.thumbnailURL} alt="thumbnail" style={{height:"40vh", borderRadius: '10px', padding:"20px"}} />
         </div>
         }
         <div className='flex justify-center'>
-        {props.type==="audio"?(
+        {item.type==="audio"?(
           <audio width="100%" controls autoPlay>
-              <source src={props.fileURL} type="audio/mpeg" />
+              <source src={item.fileURL} type="audio/mpeg" />
               Your browser does not support the audio tag.
           </audio>):(
           <div style={{width:"45vw"}}>
           <video autoPlay ref={videoRef} onEnded={handleVideoEnd} onPause={handleVideoPause} width="100%" controls>
-              <source src={props.fileURL} type="video/mp4" />
+              <source src={item.fileURL} type="video/mp4" />
               Your browser does not support the video tag.
           </video>
           </div>
@@ -69,46 +58,16 @@ export default function PodcastModal(props) {
           <div className='flex justify-between'>
           <div className='flex flex-col'>
           <Typography gutterBottom variant="h5" component="div">
-              {props.podcastName}
+              {item.podcastName}
           </Typography>
           <Typography gutterBottom variant="h8" component="div">
-              {props.speakerName}
+              {item.speakerName}
           </Typography>
           </div>
-          <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-          </IconButton>
+          <FavButton fav={fav} item={item}/>
           </div>
         </div>
-
       </Box>
     </Modal>
   )
 }
-
-
-// import React , { useRef, useEffect }  from "react" ;
-// import  Cookies from "js-cookie";
-
-// function VideoPlayer({ src }) {
-  
-// const videoRef =useRef( null);
-
-  
-// useEffect(() => {const playbackTime = Cookies.get("videoPlaybackTime");
-    
-// if(playbackTime) {
-//   videoRef.current.currentTime = playbackTime;
-//   }
-//   videoRef.current.play();
-//   }, []);
-
-// const handleVideoEnd = () => {Cookies.remove("videoPlaybackTime");};
-
-// const handleVideoPause = () => {Cookies.set("videoPlaybackTime", videoRef.current.currentTime)};
-
-
-// return (    
-// <video src={src} ref={videoRef} onEnded={handleVideoEnd} onPause={handleVideoPause}/>
-//   );
-// }

@@ -1,24 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {createContext, useContext, useEffect, useState} from 'react'
 import {auth} from '../firebase'
 
-const AuthContext=React.createContext();
-
-export function useAuth(){
-    return useContext(AuthContext)
-}
+export const AuthContext=createContext();
 
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser]= useState();
     const [loading, setLoading] = useState(true);
     const baseURL="https://backend-jxv0.onrender.com";
-
-    const value={
-        currentUser,
-        signup,
-        login,
-        logout,
-        baseURL
-    }
+    // const baseURL="http://localhost:3001";
 
     function signup(email,password){
         return auth.createUserWithEmailAndPassword(email,password);
@@ -37,6 +26,14 @@ export function AuthProvider({children}) {
         })
         return unsubscribe
     },[])
+    
+    const value={
+        currentUser,
+        signup,
+        login,
+        logout,
+        baseURL
+    }
 
   return (
     <AuthContext.Provider value={value}>

@@ -1,7 +1,7 @@
 import React from 'react'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-import { useAuth } from "../contexts/AuthContext";
+import useAuth from '../hooks/useAuth';
 import PodcastBox from './PodcastBox';
 
 export default function MyCarousel(props) {

@@ -1,66 +1,21 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { useAuth } from '../contexts/AuthContext';
+import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-
-
-const Search = styled('div')(({ theme }) => ({
-  
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.black, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '60ch',
-      '&:focus': {
-        width: '100ch',
-      },
-    },
-  },
-}));
+import Search from './Search';
 
 export default function Navbar() {
   const {currentUser, logout}=useAuth();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const navigate= useNavigate();
+ 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -83,16 +38,7 @@ export default function Navbar() {
           >
             LOGO
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon sx={{color:"grey"}}/>
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              sx={{color:"black"}}
-            />
-          </Search>
+          <Search />
           {currentUser && (
             <div>
               <IconButton
