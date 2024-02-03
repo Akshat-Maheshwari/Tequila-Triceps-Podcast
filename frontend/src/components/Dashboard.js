@@ -5,6 +5,7 @@ import useFav from '../hooks/useFav';
 import PodcastContainer from "./PodcastContainer";
 import useAxios from "../hooks/useAxios";
 import { createCopy } from "../utility/helper";
+import Loading from "./Loading";
 
 export default function Dashboard(){
   const {baseURL,currentUser}=useAuth();
@@ -40,7 +41,7 @@ export default function Dashboard(){
     setFavoritePod(favObj);
   }
 
-  if(podLoad || favLoad) return <h1>Loading...</h1>;
+  if(podLoad || favLoad) return <Loading/>;
   if(podError || (favError && favError.response.status!=404)) return <h1>Something went wrong</h1>;
   return (
     <>
