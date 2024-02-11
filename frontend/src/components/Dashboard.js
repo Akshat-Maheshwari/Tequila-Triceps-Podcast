@@ -42,7 +42,7 @@ export default function Dashboard(){
   }
 
   if(podLoad || favLoad) return <Loading/>;
-  if(podError || (favError && favError.response.status!=404)) return <h1>Something went wrong</h1>;
+  if(podError || (favError && favError.response.status!==404)) return <h1>Something went wrong</h1>;
   return (
     <>
       <Navbar />

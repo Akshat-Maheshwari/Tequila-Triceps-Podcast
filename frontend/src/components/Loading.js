@@ -2,7 +2,10 @@ import React from 'react'
 
 function Loading() {
   return (
-    <h1>Loading</h1>
+    <div>
+      <div className='text-6xl'>Loading</div>
+    </div>
+    
   )
 }
 
