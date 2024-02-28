@@ -10,6 +10,7 @@ import Menu from '@mui/material/Menu';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import Search from './Search';
+import icon from '../images/favicon.png';
 
 export default function Navbar() {
   const {currentUser, logout}=useAuth();
@@ -36,7 +37,7 @@ export default function Navbar() {
             component="div"
             sx={{color:"grey","margin-right":"20px",display: { xs: 'none', sm: 'block' } }}
           >
-            LOGO
+            <img className="w-8" src={icon} />
           </Typography>
           <Search />
           {currentUser && (

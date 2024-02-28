@@ -19,7 +19,7 @@ const style = {
 };
 
 export default function PodcastModal({fav,open,handleClose,item}) {
-
+  console.log(item);
   const videoRef=useRef(null);
   const handleVideoEnd = () => {Cookies.remove(item.fileURL);};
   const handleVideoPause = () => {console.log(videoRef);Cookies.set(item.fileURL, videoRef.currentTime)};
@@ -57,12 +57,15 @@ export default function PodcastModal({fav,open,handleClose,item}) {
         <div className='flex flex-col p-8'>
           <div className='flex justify-between'>
           <div className='flex flex-col'>
-          <Typography gutterBottom variant="h5" component="div">
-              {item.podcastName}
-          </Typography>
-          <Typography gutterBottom variant="h8" component="div">
-              {item.speakerName}
-          </Typography>
+            <Typography gutterBottom variant="h5" component="div">
+                {item.podcastName}
+            </Typography>
+            <Typography gutterBottom variant="h8" component="div">
+                {item.speakerName}
+            </Typography>
+            <Typography className="hidden" gutterBottom variant="h8" component="div">
+              {item.podcastDes}
+            </Typography>
           </div>
           <FavButton fav={fav} item={item}/>
           </div>
